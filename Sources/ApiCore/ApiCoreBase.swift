@@ -233,7 +233,7 @@ public class ApiCoreBase {
     }
     
     /// Boot routes for all registered controllers
-    public static func boot(router: Router) throws {
+    @discardableResult public static func boot(router: Router) throws -> (router: Router, secure: Router, debug: Router) {
         let group: Router
         if let prefix = configuration.server.pathPrefix {
             group = router.grouped(prefix)
@@ -247,6 +247,8 @@ public class ApiCoreBase {
         for c in controllers {
             try c.boot(router: group, secure: secureRouter, debug: debugRouter)
         }
+        
+        return (group, secureRouter, debugRouter)
     }
     
 }
